@@ -23,6 +23,8 @@
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/material": "^5.10.5",
     "@near-wallet-selector/core": "^7.0.0",
     "@near-wallet-selector/ledger": "^7.0.0",
     "@near-wallet-selector/math-wallet": "^7.0.0",
@@ -37,6 +39,7 @@
     "@verisoul/ui": "^1.1.1",
     "copy-webpack-plugin": "^11.0.0",
     "near-api-js": "^0.44.2",
+    "npm": "^8.19.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "regenerator-runtime": "^0.13.9"
