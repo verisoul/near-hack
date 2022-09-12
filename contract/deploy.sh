@@ -7,7 +7,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo ">> Deploying contract"
+echo ">> Deploying verisoul contract"
 
 # https://docs.near.org/tools/near-cli#near-dev-deploy
-near dev-deploy --wasmFile build/hello_near.wasm
+near dev-deploy --wasmFile build/verisoul.wasm
+
+
+
+#echo ">> Deploying greeting contract"
+
+# https://docs.near.org/tools/near-cli#near-dev-deploy
+#near dev-deploy --wasmFile build/hello_near.wasm
