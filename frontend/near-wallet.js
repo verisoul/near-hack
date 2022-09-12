@@ -29,7 +29,7 @@ export class Wallet {
   // To be called when the website loads
   async startUp() {
     this.walletSelector = await setupWalletSelector({
-      network: 'testnet',
+      network: 'mainnet',
       modules: [setupMyNearWallet({ iconUrl: MyNearIconUrl }),
         setupLedger({ iconUrl: LedgerIconUrl })],
     });
