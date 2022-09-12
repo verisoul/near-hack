@@ -18,3 +18,4 @@ export function isEquals(object1, object2) {
 
 export const PROJECT_NOT_FOUND_ERR = 'Project not found';
 export const PROJECT_ALREADY_EXISTS_ERR = 'Project already exists';
+export const NOT_AUTHORIZED = 'Not authorized to call function';
