@@ -1005,11 +1005,14 @@ let Verisoul = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _dec
       address
     });
     const project = this.projects.get(projectName);
-    if (!project) throw new Error(PROJECT_NOT_FOUND_ERR); // This set call works correctly
+    if (!project) throw new Error(PROJECT_NOT_FOUND_ERR);
 
     const _wallets = UnorderedMap.deserialize(project.wallets);
 
-    _wallets.set(address, verifWallet);
+    _wallets.set(address, verifWallet); // Worked with Pagoda to address potential bug where UnordereMap in a
+    // nested collection was being updated but metadata (length) was not.
+    // Fix requires code to "write back" new UnorderedMap state
+
 
     project.wallets = _wallets;
     this.projects.set(projectName, project);
@@ -1028,6 +1031,8 @@ let Verisoul = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _dec
 
     _wallets.remove(address);
 
+    project.wallets = _wallets;
+    this.projects.set(projectName, project);
     return assert(_wallets.get(address) == null, "Error removing value");
   }
 
@@ -1038,8 +1043,7 @@ let Verisoul = (_dec = NearBindgen({}), _dec2 = call({}), _dec3 = call({}), _dec
     if (!project) throw new Error(PROJECT_NOT_FOUND_ERR);
     let walletArray = [];
 
-    const _wallets = UnorderedMap.deserialize(project.wallets); // This length comes back as 0
-
+    const _wallets = UnorderedMap.deserialize(project.wallets);
 
     for (let i = 0; i < _wallets.length; i++) {
       const key = _wallets.keys.get(i);
