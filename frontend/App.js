@@ -13,7 +13,7 @@ export default function App({isSignedIn, wallet}) {
     const [complete, setComplete] = useState(false);
 
     const eventHandler = (event) => {
-        console.log(event)
+        console.log(event);
         if (event?.state?.step === 'complete') {
             setShowVerisoul(false);
             setComplete(true);
