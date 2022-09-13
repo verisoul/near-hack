@@ -3,7 +3,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const webpack = require('webpack');
 const CompressionPlugin = require("compression-webpack-plugin");
 const zlib = require("zlib");
-const zopfli = require("@gfx/zopfli");
+// const zopfli = require("@gfx/zopfli");
 
 module.exports = (env, argv) => {
     const isProduction = argv.mode === 'production'
@@ -19,9 +19,9 @@ module.exports = (env, argv) => {
             filename: 'index.js',
             chunkFilename: '[name].index.js',
         },
-        resolve: {
-            fallback: {"buffer": require.resolve("buffer/")}
-        },
+        // resolve: {
+        //     fallback: {"buffer": require.resolve("buffer/")}
+        // },
         module: {
             rules: [
                 {

@@ -1,13 +1,12 @@
 import 'regenerator-runtime/runtime';
-import {useState, useEffect} from 'react';
-import Verisoul from '@verisoul/ui';
+import {useEffect, useState} from 'react';
 import './assets/global.css';
 import daoLogo from './assets/dao-logo.png';
 
 import {SignOutButton} from './sign-out-button';
-import {Button, Container, Grid, Skeleton, Typography} from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
+import {Container, Grid, Skeleton, Typography} from "@mui/material";
 import ErrorMessage from "./error";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const src = "/js/auth-sdk/facescan"
 const BACKEND = "https://reliable-build-ojswk.cloud.serverless.com"
@@ -22,13 +21,13 @@ export default function App({isSignedIn, wallet}) {
 
     useEffect(() => {
         localStorage.setItem("ft_path", src)
-        if(isSignedIn){
+        if (isSignedIn) {
             getSession()
         }
-    },[])
+    }, [])
 
     const getSession = async () => {
-        const response = await fetch(BACKEND + `/session?address=${wallet.accountId}&project=${project}`, );
+        const response = await fetch(BACKEND + `/session?address=${wallet.accountId}&project=${project}`,);
         const {session} = await response.json();
         console.log(session)
         setSession(session);
@@ -39,7 +38,7 @@ export default function App({isSignedIn, wallet}) {
         const result = await response.json();
         setLoading(false)
         let {error} = result;
-        if(error) {
+        if (error) {
             console.log(error)
             setError(error)
         }
@@ -55,41 +54,48 @@ export default function App({isSignedIn, wallet}) {
     }
 
     if (complete) {
-        return (<Container>
-            {isSignedIn ? <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/> : null}
-            <ErrorMessage message={errorString}/>
-            <Grid
-                container
-                spacing={5}
-                direction={"column"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                textAlign={"center"}
-            >
-                <Grid item>
-                    <img src={daoLogo} className='logo' alt='DaoLogo' style={{
-                        height: '200px', width: '200px'
-                    }}/>
+        return (
+            <Container>
+                {isSignedIn ? <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/> : null}
+                <ErrorMessage message={errorString}/>
+                <Grid
+                    container
+                    spacing={5}
+                    direction={"column"}
+                    justifyContent={"center"}
+                    alignItems={"center"}
+                    textAlign={"center"}
+                >
+                    <Grid item>
+                        <img src={daoLogo} className='logo' alt='DaoLogo' style={{
+                            height: '200px', width: '200px'
+                        }}/>
+                    </Grid>
+                    <Grid item xs={8}>
+                        {errorString !== null ? <Typography variant="h4"> Unable to join the project </Typography> :
+                            <Container>
+                                {loading
+                                    ? <Skeleton/>
+                                    : <Typography variant={'h4'}>
+                                        You've joined <br/> NEARCON Afterparty DAO!
+                                    </Typography>
+                                }
+                            </Container>
+                        }
+                    </Grid>
+                    <Grid item xs={8}>
+                        <LoadingButton variant={'contained'} loading={loading}
+                                       onClick={() => window.open("https://app.astrodao.com/dao/nearcon.sputnik-dao.near", "_self")}>
+                            {errorString !== null ? "View After Party DAO" : `Vote on your preferred afterparty option`}
+                        </LoadingButton>
+                    </Grid>
                 </Grid>
-                <Grid item xs={8}>
-                    {errorString !== null ? <Typography variant="h4"> Unable to join the project </Typography> :
-                        <Typography variant={'h4'}>
-                            {loading ? <Skeleton/> : (`You've joined` + <br/> + `NEARCON Afterparty DAO!`)}
-                        </Typography>
-                    }
-                </Grid>
-                <Grid item xs={8}>
-                    <LoadingButton variant={'contained'} loading={loading}
-                            onClick={() => window.open("https://app.astrodao.com/dao/nearcon.sputnik-dao.near", "_self")}>
-                        {errorString !== null ? "View After Party DAO" : `Vote on your preferred afterparty option`}
-                    </LoadingButton>
-                </Grid>
-            </Grid>
-        </Container>)
+            </Container>
+        )
     } else {
         return (<Container>
             {(showVerisoul && session) ? <Verisoul session={session} project={"Near"} eventHandler={eventHandler}
-                                      src={src}/> : <Container>
+                                                   src={src}/> : <Container>
                 {isSignedIn ? <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/> : null}
                 <ErrorMessage message={errorString}/>
                 <Grid
