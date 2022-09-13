@@ -36,7 +36,7 @@
     "@near-wallet-selector/nightly-connect": "^7.0.0",
     "@near-wallet-selector/sender": "^7.0.0",
     "@near-wallet-selector/wallet-connect": "^7.0.0",
-    "@verisoul/ui": "^1.1.1",
+    "@verisoul/ui": "^1.1.7",
     "copy-webpack-plugin": "^11.0.0",
     "near-api-js": "^0.44.2",
     "npm": "^8.19.1",

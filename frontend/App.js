@@ -1,5 +1,5 @@
 import 'regenerator-runtime/runtime';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Verisoul from '@verisoul/ui';
 import './assets/global.css';
 import daoLogo from './assets/dao-logo.png';
@@ -7,16 +7,42 @@ import daoLogo from './assets/dao-logo.png';
 import {SignOutButton} from './sign-out-button';
 import {Button, Container, Grid, Typography} from "@mui/material";
 
-
+const BACKEND = "https://innovative-source-ebf06.cloud.serverless.com"
+const project = "Near";
 export default function App({isSignedIn, wallet}) {
     const [showVerisoul, setShowVerisoul] = useState(false);
     const [complete, setComplete] = useState(false);
+    const [session, setSession] = useState(null);
+
+    useEffect(() => {
+        if(isSignedIn){
+            getSession()
+        }
+    },[])
+
+    const getSession = async () => {
+        const response = await fetch(BACKEND + `/session?address=${wallet.accountId}&project=${project}`, );
+        const {session} = await response.json();
+        console.log(session)
+        setSession(session);
+    }
+
+    const completeSession = async () => {
+        const response = await fetch(BACKEND + `/complete?address=${wallet.accountId}&project=${project}`);
+        const {error, ok} = await response.json();
+        if(ok){
+            // TODO show success page
+        } else {
+            // TODO show error page
+        }
+    }
 
     const eventHandler = (event) => {
         console.log(event);
         if (event?.state?.step === 'complete') {
             setShowVerisoul(false);
             setComplete(true);
+            completeSession();
         }
     }
 
@@ -51,7 +77,7 @@ export default function App({isSignedIn, wallet}) {
         </Container>)
     } else {
         return (<Container>
-            {showVerisoul ? <Verisoul session={"1234"} project={"Near"} eventHandler={eventHandler}
+            {(showVerisoul && session) ? <Verisoul session={session} project={"Near"} eventHandler={eventHandler}
                                       src={"/js/auth-sdk/facescan"}/> : <Container>
                 {isSignedIn ? <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/> : null}
                 <Grid

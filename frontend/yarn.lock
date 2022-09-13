@@ -1942,10 +1942,10 @@
   dependencies:
     "@types/node" "*"
 
-"@verisoul/ui@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/@verisoul/ui/-/ui-1.1.1.tgz"
-  integrity sha512-xVZa9Ezq+mRa6a2JPtTNUD1oQNy6AsEpHLYDme5znqqG5DPqg1ymzYWlIJf6B+r+ciF5fToclpaCdQnMPXeCNA==
+"@verisoul/ui@^1.1.7":
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/@verisoul/ui/-/ui-1.1.7.tgz#401eec1eb2e67fcaff44209acdeac841c4388f58"
+  integrity sha512-tzA5yttS0wD81b9sUmI/C6ACDOhpliTAM3/Hzg9WvD0LwBebtxaBRoD7GVVjg6qnW0nJerpuCORsuUWJbNsWJA==
 
 "@walletconnect/core@2.0.0-rc.2":
   version "2.0.0-rc.2"
