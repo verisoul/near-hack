@@ -37,10 +37,10 @@ export default function App({isSignedIn, wallet}) {
     const completeSession = async () => {
         const response = await fetch(BACKEND + `/complete?sessionId=${session}&project=${project}`);
         const result = await response.json();
+        setLoading(false)
         let {error} = result;
         if(error) {
             console.log(error)
-            setLoading(false)
             setError(error)
         }
     }
