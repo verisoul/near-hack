@@ -1,7 +1,8 @@
 const fetch = require('node-fetch');
+const {params} = require('@serverless/cloud')
 const headers = {
     'Content-Type': 'application/json',
-    'x-api-key': 'lRROqFxjdI6GQxXHYcA3ncvNYLZXe9la1QiGRLId'
+    'x-api-key': params.PROD_API_KEY
 }
 const postSession = async (project, address) => {
 

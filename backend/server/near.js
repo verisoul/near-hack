@@ -1,16 +1,17 @@
 const nearAPI = require("near-api-js");
 const {keyStores, KeyPair, providers, WalletConnection, connect, Contract, utils} = nearAPI;
+const {params} = require('@serverless/cloud')
 
 const authenticate = async () => {
     const myKeyStore = new keyStores.InMemoryKeyStore();
-    const PRIVATE_KEY = "ed25519:2fzADnzZhtswdw6V4S9VcC5NW55kZSGgM8ostHafj4mGEfW2xckSqASXLfajtp1rkFyRGi6H5hp3AJiYBL9aY6ts";
+    const PRIVATE_KEY = params.MAINNET_PRIVATE_KEY;
 // creates a public / private key pair using the provided private key
     const keyPair = KeyPair.fromString(PRIVATE_KEY);
 // adds the keyPair you created to keyStore
-    await myKeyStore.setKey("mainnet", "verisoul-bot.near", keyPair);
+    await myKeyStore.setKey(params.NETWORK, params.PROPOSAL_ACCOUNT, keyPair);
 
     const connectionConfig = {
-        networkId: "mainnet",
+        networkId: params.NETWORK,
         keyStore: myKeyStore,
         nodeUrl: "https://rpc.mainnet.near.org",
         walletUrl: "https://wallet.mainnet.near.org",
@@ -20,8 +21,7 @@ const authenticate = async () => {
 
 // connect to NEAR
     const nearConnection = await connect(connectionConfig);
-
-    let account = await nearConnection.account("verisoul-bot.near");
+    let account = await nearConnection.account(params.PROPOSAL_ACCOUNT);
     return account
 }
 
@@ -44,7 +44,7 @@ const addUserToDAO = async (account, daoId, userId, callback, bondInNear = "0.00
         meta: 'testing',
         args: {
             "proposal": {
-                "description": "Testing adding two users at once$$$$$$$$ProposeAddMember",
+                "description": `${params.PROPOSAL_ACCOUNT} verified ${userId} uniqueness and is requesting to add them to the DAO`,
                 "kind": {
                     "AddMemberToRole": {
                         "member_id": userId,
