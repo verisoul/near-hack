@@ -6,13 +6,15 @@ import daoLogo from './assets/dao-logo.png';
 
 import {SignOutButton} from './sign-out-button';
 import {Button, Container, Grid, Typography} from "@mui/material";
+import ErrorMessage from "./error";
 
-const BACKEND = "https://innovative-source-ebf06.cloud.serverless.com"
+const BACKEND = "https://reliable-build-ojswk.cloud.serverless.com\n"
 const project = "Near";
 export default function App({isSignedIn, wallet}) {
     const [showVerisoul, setShowVerisoul] = useState(false);
     const [complete, setComplete] = useState(false);
     const [session, setSession] = useState(null);
+    const [errorString, setError] = useState(null);
 
     useEffect(() => {
         if(isSignedIn){
@@ -28,12 +30,14 @@ export default function App({isSignedIn, wallet}) {
     }
 
     const completeSession = async () => {
-        const response = await fetch(BACKEND + `/complete?address=${wallet.accountId}&project=${project}`);
-        const {error, ok} = await response.json();
+        const response = await fetch(BACKEND + `/complete?sessionId=${session}&project=${project}`);
+        const result = await response.json();
+        console.log(result)
+        const {error, ok} = result;
         if(ok){
             // TODO show success page
         } else {
-            // TODO show error page
+           setError(error)
         }
     }
 
@@ -49,6 +53,7 @@ export default function App({isSignedIn, wallet}) {
     if (complete) {
         return (<Container>
             {isSignedIn ? <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/> : null}
+            <ErrorMessage message={errorString}/>
             <Grid
                 container
                 spacing={5}
@@ -80,6 +85,7 @@ export default function App({isSignedIn, wallet}) {
             {(showVerisoul && session) ? <Verisoul session={session} project={"Near"} eventHandler={eventHandler}
                                       src={"/js/auth-sdk/facescan"}/> : <Container>
                 {isSignedIn ? <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/> : null}
+                <ErrorMessage message={errorString}/>
                 <Grid
                     container
                     spacing={5}

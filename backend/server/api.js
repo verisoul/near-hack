@@ -4,6 +4,8 @@ const headers = {
     'Content-Type': 'application/json',
     'x-api-key': params.PROD_API_KEY
 }
+
+const API_URL = "https://i5yha6z92c.execute-api.us-east-1.amazonaws.com/test/session"
 const postSession = async (project, address) => {
 
     let raw = JSON.stringify({
@@ -18,7 +20,7 @@ const postSession = async (project, address) => {
         redirect: 'follow'
     };
 
-    let response = await fetch("https://i5yha6z92c.execute-api.us-east-1.amazonaws.com/test/session", requestOptions)
+    let response = await fetch(API_URL, requestOptions)
     let request = await response.json();
     console.log(request)
     let {sessionId} = request
@@ -26,7 +28,7 @@ const postSession = async (project, address) => {
     return sessionId
 }
 
-const getSession = async (project, sessionId) => {
+const getSession = async ( sessionId, project) => {
     let requestOptions = {
         method: 'GET',
         headers,
@@ -34,8 +36,8 @@ const getSession = async (project, sessionId) => {
     };
 
     const params = new URLSearchParams({project, sessionId})
-
-    let response = await fetch("https://i5yha6z92c.execute-api.us-east-1.amazonaws.com/test/session" + params, requestOptions)
+    const URL = API_URL + "?" +params.toString()
+    let response = await fetch(URL, requestOptions)
     return await response.json();
 }
 
