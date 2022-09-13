@@ -1,0 +1,26 @@
+{
+  "name": "near-hack-backend",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "devDependencies": {
+    "@serverless/cloud": "^2.10.16",
+    "axios": "^0.23.0",
+    "http-proxy-middleware": "^2.0.4"
+  },
+  "serverless": {
+    "app": "backend",
+    "org": "verisoul"
+  },
+  "scripts": {
+    "start": "cloud --skip-update",
+    "build": "cloud build",
+    "cloud:dev": "cd frontend && npm run start",
+    "cloud:build": "echo 'no build needed'"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "near-api-js": "^1.0.0",
+    "node-fetch": "2.6.7"
+  }
+}
