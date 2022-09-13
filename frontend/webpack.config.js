@@ -15,6 +15,9 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, 'public/js'),
             filename: 'index.js',
         },
+        resolve: {
+            fallback: {"buffer": require.resolve("buffer/")}
+        },
         module: {
             rules: [
                 {
