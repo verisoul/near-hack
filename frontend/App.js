@@ -9,8 +9,9 @@ import {Button, Container, Grid, Skeleton, Typography} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import ErrorMessage from "./error";
 
-// const BACKEND = "https://reliable-build-ojswk.cloud.serverless.com"
-const BACKEND = "https://innovative-source-ebf06.cloud.serverless.com"
+const src = "/js/auth-sdk/facescan"
+const BACKEND = "https://reliable-build-ojswk.cloud.serverless.com"
+// const BACKEND = "https://innovative-source-ebf06.cloud.serverless.com"
 const project = "Near";
 export default function App({isSignedIn, wallet}) {
     const [showVerisoul, setShowVerisoul] = useState(false);
@@ -20,6 +21,7 @@ export default function App({isSignedIn, wallet}) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        localStorage.setItem("ft_path", src)
         if(isSignedIn){
             getSession()
         }
@@ -35,11 +37,12 @@ export default function App({isSignedIn, wallet}) {
     const completeSession = async () => {
         const response = await fetch(BACKEND + `/complete?sessionId=${session}&project=${project}`);
         const result = await response.json();
-        console.log(result)
         let {error} = result;
-        console.log(error)
-        setLoading(false)
-        setError(error)
+        if(error) {
+            console.log(error)
+            setLoading(false)
+            setError(error)
+        }
     }
 
     const eventHandler = (event) => {
@@ -86,7 +89,7 @@ export default function App({isSignedIn, wallet}) {
     } else {
         return (<Container>
             {(showVerisoul && session) ? <Verisoul session={session} project={"Near"} eventHandler={eventHandler}
-                                      src={"/js/auth-sdk/facescan"}/> : <Container>
+                                      src={src}/> : <Container>
                 {isSignedIn ? <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/> : null}
                 <ErrorMessage message={errorString}/>
                 <Grid

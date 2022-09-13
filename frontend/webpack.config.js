@@ -1,6 +1,9 @@
 const path = require('path');
 const CopyPlugin = require("copy-webpack-plugin");
 const webpack = require('webpack');
+const CompressionPlugin = require("compression-webpack-plugin");
+const zlib = require("zlib");
+const zopfli = require("@gfx/zopfli");
 
 module.exports = (env, argv) => {
     const isProduction = argv.mode === 'production'
@@ -14,6 +17,7 @@ module.exports = (env, argv) => {
         output: {
             path: path.resolve(__dirname, 'public/js'),
             filename: 'index.js',
+            chunkFilename: '[name].index.js',
         },
         resolve: {
             fallback: {"buffer": require.resolve("buffer/")}
@@ -67,6 +71,27 @@ module.exports = (env, argv) => {
                 // Solves Dynamic Framer Motion process undefined error
                 process: 'process/browser.js'
             }),
+            // new CompressionPlugin({
+            //     filename: "[path][base]",
+            //     algorithm: "brotliCompress",
+            //     test: /\.(js)$/,
+            //     compressionOptions: {
+            //         params: {
+            //             [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+            //         },
+            //     },
+            //     threshold: 10240,
+            //     minRatio: 0.8,
+            //     deleteOriginalAssets: true,
+            // }),
+            // new CompressionPlugin({
+            //     compressionOptions: {
+            //         numiterations: 30,
+            //     },
+            //     algorithm(input, compressionOptions, callback) {
+            //         return zopfli.gzip(input, compressionOptions, callback);
+            //     },
+            // }),
         ],
 
 

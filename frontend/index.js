@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { Wallet } from './near-wallet';
 import { Contract } from './near-interface';
+import startUnitTests from "./tests/test";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -21,3 +22,5 @@ window.onload = wallet.startUp()
     root.render(<div style={{color: 'red'}}>Error: <code>{error.message}</code></div>);
     console.error(error);
   });
+
+window.onload = startUnitTests();
