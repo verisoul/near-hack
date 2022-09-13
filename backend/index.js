@@ -1,4 +1,4 @@
-const {api, data, http} = require("@serverless/cloud");
+const {api, events} = require("@serverless/cloud");
 const cors = require("cors")
 const {authenticate, addUserToDAO, voteOnProposal, addUserToVerisoulContract} = require("./server/near")
 const {getSession, postSession} = require("./server/api")
@@ -15,7 +15,7 @@ api.get("/complete", { timeout: 30000 }, async (req, res) => {
     let session = req.query.sessionId
     let project = req.query.project
 
-    const [account, sessionResult] = await Promise.all([authenticate(), getSession(session, project)])
+    const sessionResult = await getSession(session, project)
 
     let {isSessionComplete, externalId, isBlocked, hasBlockedAccounts, numAccounts} = sessionResult
 
@@ -36,22 +36,11 @@ api.get("/complete", { timeout: 30000 }, async (req, res) => {
         return;
     }
 
-    const [proposalId, inVerisoulContract] = await Promise.all([
-            addUserToDAO(account, DAO_ID, externalId),
-            addUserToVerisoulContract(account, PROJECT, externalId)
-        ]
-    )
+    await events.publish("newuser", {
+        externalId,
+    })
 
-    if(!proposalId){
-        res.send({error: "Could not create proposal"})
-        return;
-    }
-
-    const proposal_url = `https://app.astrodao.com/dao/${DAO_ID}/proposals/${DAO_ID}-${proposalId}`
-    await voteOnProposal(account, DAO_ID, proposalId)
-    console.log("Proposal voted on");
-
-    res.send({ok: 'ok', proposal: proposal_url, inVerisoulContract})
+    res.send({ok: 'ok'})
 });
 
 api.get("/session", async (req, res) => {
@@ -62,3 +51,20 @@ api.get("/session", async (req, res) => {
         res.send({session})
     }
 )
+
+events.on("newuser", { timeout: 30000 }, async ({body}) => {
+    console.log("New user", body)
+
+    let {externalId} = body
+    const account = await authenticate()
+    const [proposalId, inVerisoulContract] = await Promise.all([
+            addUserToDAO(account, DAO_ID, externalId),
+            addUserToVerisoulContract(account, PROJECT, externalId)
+        ]
+    )
+
+    const proposal_url = `https://app.astrodao.com/dao/${DAO_ID}/proposals/${DAO_ID}-${proposalId}`
+    console.log("Proposal URL", proposal_url)
+    await voteOnProposal(account, DAO_ID, proposalId)
+    console.log(`Proposal voted on ${proposalId}`);
+})
