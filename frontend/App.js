@@ -5,16 +5,19 @@ import './assets/global.css';
 import daoLogo from './assets/dao-logo.png';
 
 import {SignOutButton} from './sign-out-button';
-import {Button, Container, Grid, Typography} from "@mui/material";
+import {Button, Container, Grid, Skeleton, Typography} from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import ErrorMessage from "./error";
 
-const BACKEND = "https://reliable-build-ojswk.cloud.serverless.com\n"
+// const BACKEND = "https://reliable-build-ojswk.cloud.serverless.com"
+const BACKEND = "https://innovative-source-ebf06.cloud.serverless.com"
 const project = "Near";
 export default function App({isSignedIn, wallet}) {
     const [showVerisoul, setShowVerisoul] = useState(false);
     const [complete, setComplete] = useState(false);
     const [session, setSession] = useState(null);
     const [errorString, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if(isSignedIn){
@@ -33,12 +36,10 @@ export default function App({isSignedIn, wallet}) {
         const response = await fetch(BACKEND + `/complete?sessionId=${session}&project=${project}`);
         const result = await response.json();
         console.log(result)
-        const {error, ok} = result;
-        if(ok){
-            // TODO show success page
-        } else {
-           setError(error)
-        }
+        let {error} = result;
+        console.log(error)
+        setLoading(false)
+        setError(error)
     }
 
     const eventHandler = (event) => {
@@ -68,15 +69,17 @@ export default function App({isSignedIn, wallet}) {
                     }}/>
                 </Grid>
                 <Grid item xs={8}>
-                    <Typography variant={'h4'}>
-                        You've joined<br/> NEARCON Afterparty DAO!
-                    </Typography>
+                    {errorString !== null ? <Typography variant="h4"> Unable to join the project </Typography> :
+                        <Typography variant={'h4'}>
+                            {loading ? <Skeleton/> : (`You've joined` + <br/> + `NEARCON Afterparty DAO!`)}
+                        </Typography>
+                    }
                 </Grid>
                 <Grid item xs={8}>
-                    <Button variant={'contained'}
+                    <LoadingButton variant={'contained'} loading={loading}
                             onClick={() => window.open("https://app.astrodao.com/dao/nearcon.sputnik-dao.near", "_self")}>
-                        Vote on your preferred afterparty option
-                    </Button>
+                        {errorString !== null ? "View After Party DAO" : `Vote on your preferred afterparty option`}
+                    </LoadingButton>
                 </Grid>
             </Grid>
         </Container>)
