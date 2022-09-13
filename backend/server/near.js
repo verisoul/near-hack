@@ -21,7 +21,6 @@ const authenticate = async () => {
 
 // connect to NEAR
     const nearConnection = await connect(connectionConfig);
-
     let account = await nearConnection.account(params.PROPOSAL_ACCOUNT);
     return account
 }

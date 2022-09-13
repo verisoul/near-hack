@@ -50,7 +50,7 @@ api.get("/complete", async (req, res) => {
 api.get("/session", async (req, res) => {
         let address = req.query.address
         let project = req.query.project
-        console.log(project, address)
+        console.log(project, address);
         let session = await postSession(project, address)
         res.send({session})
     }
