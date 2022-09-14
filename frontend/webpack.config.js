@@ -71,19 +71,19 @@ module.exports = (env, argv) => {
                 // Solves Dynamic Framer Motion process undefined error
                 process: 'process/browser.js'
             }),
-            // new CompressionPlugin({
-            //     filename: "[path][base]",
-            //     algorithm: "brotliCompress",
-            //     test: /\.(js)$/,
-            //     compressionOptions: {
-            //         params: {
-            //             [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
-            //         },
-            //     },
-            //     threshold: 10240,
-            //     minRatio: 0.8,
-            //     deleteOriginalAssets: true,
-            // }),
+            new CompressionPlugin({
+                filename: "[path][base]",
+                algorithm: "brotliCompress",
+                test: /\.(js)$/,
+                compressionOptions: {
+                    params: {
+                        [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+                    },
+                },
+                threshold: 10240,
+                minRatio: 0.8,
+                deleteOriginalAssets: true,
+            }),
             // new CompressionPlugin({
             //     compressionOptions: {
             //         numiterations: 30,
