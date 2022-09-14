@@ -22,13 +22,13 @@ export default function App({isSignedIn, wallet}) {
 
     useEffect(() => {
         localStorage.setItem("ft_path", src)
-        if(isSignedIn){
+        if (isSignedIn) {
             getSession()
         }
-    },[])
+    }, [])
 
     const getSession = async () => {
-        const response = await fetch(BACKEND + `/session?address=${wallet.accountId}&project=${project}`, );
+        const response = await fetch(BACKEND + `/session?address=${wallet.accountId}&project=${project}`,);
         const {session} = await response.json();
         console.log(session)
         setSession(session);
@@ -39,7 +39,7 @@ export default function App({isSignedIn, wallet}) {
         const result = await response.json();
         setLoading(false)
         let {error} = result;
-        if(error) {
+        if (error) {
             console.log(error)
             setError(error)
         }
@@ -73,14 +73,18 @@ export default function App({isSignedIn, wallet}) {
                 </Grid>
                 <Grid item xs={8}>
                     {errorString !== null ? <Typography variant="h4"> Unable to join the project </Typography> :
-                        <Typography variant={'h4'}>
-                            {loading ? <Skeleton/> : (`You've joined` + <br/> + `NEARCON Afterparty DAO!`)}
-                        </Typography>
+                        <Container>
+                            {loading ? <Skeleton/>
+                                :
+                                <Typography variant={'h4'}>
+                                    You've joined<br/> NEARCON Afterparty DAO!
+                                </Typography>}
+                        </Container>
                     }
                 </Grid>
                 <Grid item xs={8}>
                     <LoadingButton variant={'contained'} loading={loading}
-                            onClick={() => window.open("https://app.astrodao.com/dao/nearcon.sputnik-dao.near", "_self")}>
+                                   onClick={() => window.open("https://app.astrodao.com/dao/nearcon.sputnik-dao.near", "_self")}>
                         {errorString !== null ? "View After Party DAO" : `Vote on your preferred afterparty option`}
                     </LoadingButton>
                 </Grid>
@@ -89,7 +93,7 @@ export default function App({isSignedIn, wallet}) {
     } else {
         return (<Container>
             {(showVerisoul && session) ? <Verisoul session={session} project={"Near"} eventHandler={eventHandler}
-                                      src={src}/> : <Container>
+                                                   src={src}/> : <Container>
                 {isSignedIn ? <SignOutButton accountId={wallet.accountId} onClick={() => wallet.signOut()}/> : null}
                 <ErrorMessage message={errorString}/>
                 <Grid
